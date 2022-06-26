@@ -95,6 +95,11 @@ if g:delve_use_vimux && !exists("g:loaded_vimux")
     finish
 endif
 
+" delve_use_kitty
+if !exists("g:delve_use_kitty")
+    let g:delve_use_kitty = 0
+endif
+
 " Priority and groups are supported since version 8.1.0658.
 if has("patch8.1.0658")
     let s:sign_parameters = s:sign_parameters ." group=". g:delve_sign_group
@@ -376,6 +381,9 @@ function! delve#runCommand(command, ...)
     if g:delve_use_vimux
         let cmd = cmd . cmdSep . " cd -"
         call VimuxRunCommand(cmd)
+    elseif g:delve_use_kitty
+        let cmd = cmd . cmdSep . " cd -"
+        call KittyRunner(cmd)
     elseif s:use_termopen || s:use_term_start
         if g:delve_new_command == "vnew"
             vnew
